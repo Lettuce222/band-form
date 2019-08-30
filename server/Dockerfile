@@ -5,5 +5,6 @@ WORKDIR /api
 COPY . .
 ENV GO111MODULE=on
 
-RUN go get github.com/pilu/fresh
+RUN go get github.com/pilu/fresh && \
+    go get -v github.com/globalsign/mgo
 CMD ["fresh"]

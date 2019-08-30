@@ -1,7 +1,9 @@
 package main // import "server"
 
-import "github.com/gin-gonic/gin"
-
+import {
+	"github.com/gin-gonic/gin"
+	"hoge"
+}
 func main() {
     r := gin.Default()
     r.GET("/", func(c *gin.Context) {
