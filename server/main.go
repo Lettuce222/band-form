@@ -15,21 +15,19 @@ import (
 )
 
 func main() {
-    // connect mongoDB
-    // mongoInfo := &mgo.DialInfo{
-    //     Addrs:    []string{"mongo:27017"},
-    //     Timeout:  20 * time.Second,
-    //     Database: "test",
-    //     Username: "root",
-    //     Password: "example",
-    //     Source: "example",
-    // }
+
+    credential := &mgo.Credential{
+        Username:   "root",
+        Password:   "example",
+    }
 
     session, err := mgo.Dial("mongo:27017")
     if err != nil {
         panic(err)
     }
     defer session.Close()
+
+    session.Login(credential)
 
     db_names, _ := session.DatabaseNames()
     fmt.Printf("database num:%d\n", len(db_names))
