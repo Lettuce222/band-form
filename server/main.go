@@ -2,14 +2,49 @@
 package main // import "server"
 
 import (
-	"server/handler"
+    "server/handler"
+
+    // "time"
+    "fmt"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
-	"github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
+
+    "gopkg.in/mgo.v2"
 )
 
 func main() {
+    // connect mongoDB
+    // mongoInfo := &mgo.DialInfo{
+    //     Addrs:    []string{"mongo:27017"},
+    //     Timeout:  20 * time.Second,
+    //     Database: "test",
+    //     Username: "root",
+    //     Password: "example",
+    //     Source: "example",
+    // }
+
+    session, err := mgo.Dial("mongo:27017")
+    if err != nil {
+        panic(err)
+    }
+    defer session.Close()
+
+    db_names, _ := session.DatabaseNames()
+    fmt.Printf("database num:%d\n", len(db_names))
+        for _, v := range db_names {
+        fmt.Printf("database name:%s\n", v)
+    }
+
+    db := session.DB("test")
+    fmt.Printf("debug")
+
+    c_names, _ := db.CollectionNames()
+    for _, v := range c_names {
+        fmt.Printf("collection name:%s\n", v)
+    }
+
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
