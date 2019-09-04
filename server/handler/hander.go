@@ -45,21 +45,10 @@ func List(c *gin.Context) {
 }
 
 func Upload(c *gin.Context) {
-    form, _ := c.MultipartForm()
-    files := form.File["file"]
+    // form, _ := c.MultipartForm()
 
-    // uuid を所得
-    uuid := c.PostForm("uuid")
 
-    for _, file := range files {
-        // ファイル名にuuidを仕込む
-        err := c.SaveUploadedFile(file, "images/"+uuid+".png")
-        if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-        }
-    }
-
-    c.String(http.StatusOK, fmt.Sprintf("%d files uploaded!", len(files)))
+    // c.String(http.StatusOK, fmt.Sprintf("%d files uploaded!", len(files)))
 }
 
 func Delete(c *gin.Context) {

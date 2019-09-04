@@ -2,10 +2,11 @@
 package main // import "server"
 
 import (
-    "server/handler"
+    // "server/handler"
 
     // "time"
-    "fmt"
+    "net/http"
+    // "fmt"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
@@ -14,8 +15,15 @@ import (
     "gopkg.in/mgo.v2"
 )
 
+type Form struct {
+    Email        string `json:"email"`
+    Name      string `json:"name"`
+    Food      string `json:"food"`
+}
+
 func main() {
 
+    // init mongoDB
     credential := &mgo.Credential{
         Username:   "root",
         Password:   "example",
@@ -28,20 +36,8 @@ func main() {
     defer session.Close()
 
     session.Login(credential)
-
-    db_names, _ := session.DatabaseNames()
-    fmt.Printf("database num:%d\n", len(db_names))
-        for _, v := range db_names {
-        fmt.Printf("database name:%s\n", v)
-    }
-
     db := session.DB("test")
-    fmt.Printf("debug")
-
-    c_names, _ := db.CollectionNames()
-    for _, v := range c_names {
-        fmt.Printf("collection name:%s\n", v)
-    }
+    collection := db.C("hoge")
 
 	r := gin.Default()
 
@@ -51,11 +47,16 @@ func main() {
 		AllowHeaders: []string{"*"},
 	}))
 
-	// 追加!!
 	r.Use(static.Serve("/", static.LocalFile("./images", true)))
 
-	r.GET("/images", handler.List)
-	r.POST("/images", handler.Upload)
-	r.DELETE("/images/:uuid", handler.Delete)
+	r.POST("/band/update", func(c *gin.Context) {
+        var form interface{}
+        c.BindJSON(&form)
+        myMap := form.(map[string]interface{})
+
+        collection.Insert(myMap)
+
+		c.String(http.StatusOK, "Hello %s!!", myMap["name"])
+    })
 	r.Run(":8888")
 }

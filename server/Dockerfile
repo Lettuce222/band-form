@@ -6,6 +6,6 @@ ADD . /api
 ENV GO111MODULE=on
 
 RUN go get github.com/pilu/fresh && \
-    go get -v github.com/globalsign/mgo && \
-    go get github.com/gin-gonic/gin
+  go get -v github.com/globalsign/mgo && \
+  go get github.com/gin-gonic/gin
 CMD ["fresh"]

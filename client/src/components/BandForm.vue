@@ -29,6 +29,10 @@
           <b-form-checkbox value="me">Check me out</b-form-checkbox>
           <b-form-checkbox value="that">Check that out</b-form-checkbox>
         </b-form-checkbox-group>
+
+        <b-form-group id="input-group-5" label="araaa:" label-for="input-5">
+          <b-form-input id="input-5" v-model="form.test" required placeholder="Enter name"></b-form-input>
+        </b-form-group>
       </b-form-group>
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
@@ -45,7 +49,8 @@ export default {
         email: "",
         name: "",
         food: null,
-        checked: []
+        checked: [],
+        test: ""
       },
       foods: [
         { text: "Select One", value: null },
