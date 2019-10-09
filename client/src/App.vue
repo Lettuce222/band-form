@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import bandform from "./components/BandForm.vue";
+import bandform from "./components/Select.vue";
 export default {
   name: "app",
   components: {

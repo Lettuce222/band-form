@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      const url = "http://localhost:8888/band/update";
+      const url = "http://localhost:8888/band/update"; // TODO: 本番環境対応
       const json = JSON.stringify(this.form);
       axios
         .post(url, json)
