@@ -1,18 +1,18 @@
-import React from "react";
-import { Card, Button, Icon } from "semantic-ui-react";
+import React, { FC } from 'react';
 
-import "./App.css";
+import ColorfulBeads from './containers/ColorfulBeads';
+import Counter from './containers/Counter';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <Card>
-        <Button color="red">
-          <Icon name="redo" />
-        </Button>
-      </Card>
-    </div>
-  );
-};
+import './App.css';
+
+const App: FC = () => (
+  <div className="container">
+    <header>
+      <h1>ビーズカウンター</h1>
+    </header>
+    <Counter />
+    <ColorfulBeads />
+  </div>
+);
 
 export default App;
