@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 
 import App from './App';
-import counterReducer, { initialState } from './reducer';
+import MakeFormReducer, { initialState } from './reducers/makeform';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 import './styles/semantic.min.css';
 
-const store = createStore(counterReducer, initialState);
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(MakeFormReducer, initialState);
 
 ReactDOM.render(
   <Provider store={store}>
