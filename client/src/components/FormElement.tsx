@@ -41,7 +41,7 @@ const MakeForm: FC<FormElementProps> = ({
 
   return (
     <Form.Field>
-      <Form.Select options={options} placeholder="フォーム種類" />
+      <Form.Select options={options} placeholder="記述式" />
       {renderElements(attr)}
       <Form.Button color="red" onClick={remove}>
         削除

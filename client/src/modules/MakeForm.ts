@@ -27,7 +27,7 @@ const MakeFormModule = createSlice({
 
       return {
         nextElemId: state.nextElemId + 1,
-        list: [...state.list, elem],
+        list: state.list.concat(elem),
       };
     },
 
