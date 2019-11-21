@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import MakeForm from './containers/MakeForm';
+import MakeForm from './components/MakeForm';
 
 import './App.css';
 
