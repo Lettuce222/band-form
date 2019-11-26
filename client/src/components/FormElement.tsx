@@ -1,8 +1,5 @@
 import React, { FC } from 'react';
 import { Form } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
-import { FormElementState } from '../modules/FormElement';
-import { RootState } from '../store';
 
 const options = [
   { key: 0, text: '記述式', value: 'input' },
@@ -13,19 +10,16 @@ const options = [
 ];
 
 export interface FormElementProps {
-  index: number;
+  attr?: string;
   remove?: () => void;
 }
 
-const FormElement: FC<FormElementProps> = ({ index, remove }) => {
-  const elems = useSelector(
-    (state: RootState): FormElementState[] => state.MakeForm.list,
-  );
-
-  const element = elems[index];
-
-  const renderElements = (elem: FormElementState) => {
-    switch (elem.attr) {
+const MakeForm: FC<FormElementProps> = ({
+  attr = 'input',
+  remove = () => {},
+}) => {
+  const renderElements = (att: string) => {
+    switch (att) {
       case 'input':
         return (
           <Form.Field>
@@ -36,7 +30,7 @@ const FormElement: FC<FormElementProps> = ({ index, remove }) => {
       case 'textarea':
         return (
           <Form.Field>
-            <input defaultValue="無題の質問" value={elem.title} />
+            <input defaultValue="無題の質問" />
             <textarea value="記述式テキスト（長文回答）" disabled />
           </Form.Field>
         );
@@ -48,7 +42,7 @@ const FormElement: FC<FormElementProps> = ({ index, remove }) => {
   return (
     <Form.Field>
       <Form.Select options={options} placeholder="記述式" />
-      {renderElements(element)}
+      {renderElements(attr)}
       <Form.Button color="red" onClick={remove}>
         削除
       </Form.Button>
@@ -56,4 +50,4 @@ const FormElement: FC<FormElementProps> = ({ index, remove }) => {
   );
 };
 
-export default FormElement;
+export default MakeForm;

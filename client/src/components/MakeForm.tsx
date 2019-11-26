@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form } from 'semantic-ui-react';
-import MakeFormModule from '../modules/MakeForm';
+import MakeFormModule, { MakeFormState } from '../modules/MakeForm';
 import { FormElementState } from '../modules/FormElement';
 import { RootState } from '../store';
 
 import FormElement from './FormElement';
 
-const MakeForm: FC = () => {
+const MakeForm: FC = props => {
   const dispatch = useDispatch();
   const elems = useSelector(
     (state: RootState): FormElementState[] => state.MakeForm.list,
@@ -21,7 +21,7 @@ const MakeForm: FC = () => {
     <Form>
       <Form.Field>
         {elems.map((elem: FormElementState, index: number) => (
-          <FormElement index={index} remove={() => remove(index)} />
+          <FormElement remove={() => remove(index)} />
         ))}
       </Form.Field>
       <Form.Button onClick={add}>追加</Form.Button>

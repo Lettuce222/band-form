@@ -23,7 +23,6 @@ const MakeFormModule = createSlice({
       const elem: FormElementState = {
         id: state.nextElemId,
         attr: 'input',
-        title: '',
       };
 
       return {
@@ -32,6 +31,7 @@ const MakeFormModule = createSlice({
       };
     },
 
+    // completed のトグル
     remove: (state, action: PayloadAction<number>) => ({
       ...state,
       list: state.list.filter((elem, index) => index !== action.payload),
