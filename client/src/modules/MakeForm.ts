@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormElementState } from './FormElement';
+import { FormElementState, FormElementInitialState } from './FormElement';
 
 // state
 export interface MakeFormState {
@@ -20,10 +20,7 @@ const MakeFormModule = createSlice({
   reducers: {
     // todo を追加
     add: state => {
-      const elem: FormElementState = {
-        id: state.nextElemId,
-        attr: 'input',
-      };
+      const elem: FormElementState = FormElementInitialState;
 
       return {
         nextElemId: state.nextElemId + 1,
@@ -31,10 +28,30 @@ const MakeFormModule = createSlice({
       };
     },
 
-    // completed のトグル
     remove: (state, action: PayloadAction<number>) => ({
       ...state,
       list: state.list.filter((elem, index) => index !== action.payload),
+    }),
+
+    // FormElementの変更
+    changeAttr: (
+      state,
+      action: PayloadAction<{ index: number; str: string }>,
+    ) => ({
+      ...state,
+      list: state.list.map((elem, index) => {
+        if (index === action.payload.index) return elem;
+
+        return { ...elem, attr: action.payload.str };
+      }),
+    }),
+    changeTitle: (state, action: PayloadAction<string>) => ({
+      ...state,
+      title: action.payload,
+    }),
+    changeText: (state, action: PayloadAction<string>) => ({
+      ...state,
+      text: action.payload,
     }),
   },
 });

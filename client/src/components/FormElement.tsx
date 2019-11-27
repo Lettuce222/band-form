@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+import { useDispatch } from 'react-redux';
 import { Form } from 'semantic-ui-react';
+import FormElementModule, { FormElementState } from '../modules/FormElement';
 
 const options = [
   { key: 0, text: '記述式', value: 'input' },
@@ -10,20 +12,42 @@ const options = [
 ];
 
 export interface FormElementProps {
-  attr?: string;
+  index: number;
   remove?: () => void;
 }
 
-const MakeForm: FC<FormElementProps> = ({
-  attr = 'input',
+const FormElement: FC<FormElementProps> = ({
+  index = 0,
   remove = () => {},
 }) => {
+  const dispatch = useDispatch();
+
+  // const elems = useSelector(
+  //   (state: RootState): FormElementState[] => state.MakeForm.list
+  // );
+  const elems: FormElementState[] = [];
+  const elem = elems[index];
+
+  // const changeAttr = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(FormElementModule.actions.changeAttr(e.target.value));
+  // };
+  const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(FormElementModule.actions.changeAttr(e.target.value));
+  };
+  // const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(FormElementModule.actions.changeAttr(e.target.value));
+  // }
+
   const renderElements = (att: string) => {
     switch (att) {
       case 'input':
         return (
           <Form.Field>
-            <input defaultValue="無題の質問" />
+            <input
+              defaultValue="無題の質問"
+              value={elem.title}
+              onChange={changeTitle}
+            />
             <input value="記述式テキスト（短文回答）" disabled />
           </Form.Field>
         );
@@ -42,7 +66,7 @@ const MakeForm: FC<FormElementProps> = ({
   return (
     <Form.Field>
       <Form.Select options={options} placeholder="記述式" />
-      {renderElements(attr)}
+      {renderElements(elem.attr)}
       <Form.Button color="red" onClick={remove}>
         削除
       </Form.Button>
@@ -50,4 +74,4 @@ const MakeForm: FC<FormElementProps> = ({
   );
 };
 
-export default MakeForm;
+export default FormElement;
