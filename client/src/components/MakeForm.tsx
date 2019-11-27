@@ -133,7 +133,7 @@ const MakeForm: FC = props => {
           <Form.Field>
             {labels.map((label, labelIndex) => (
               <Form.Group>
-                <Label>{labelIndex}</Label>
+                {labelIndex}.
                 <input
                   value={label}
                   onChange={e => handleChange(labelIndex, e.target.value)}
@@ -187,8 +187,43 @@ const MakeForm: FC = props => {
       </Form.Field>
     ));
 
+  const renderBaseElements = () => (
+    <Form.Field>
+      <Form.Field>
+        <Label>バンド名</Label>
+        <input defaultValue="バンド名" disabled />
+      </Form.Field>
+      <Form.Field>
+        <Label>代表者名</Label>
+        <Form.Group>
+          <input defaultValue="姓" disabled />
+          <input defaultValue="名" disabled />
+        </Form.Group>
+      </Form.Field>
+      <Form.Field>
+        <Label>メンバー</Label>
+        <Form.Group>
+          <input defaultValue="姓" disabled />
+          <input defaultValue="名" disabled />
+        </Form.Group>
+        <Form.Group>
+          <input defaultValue="姓" disabled />
+          <input defaultValue="名" disabled />
+        </Form.Group>
+        <Form.Group>
+          <input defaultValue="姓" disabled />
+          <input defaultValue="名" disabled />
+        </Form.Group>
+        <Button icon disabled>
+          <Icon name="plus" />
+        </Button>
+      </Form.Field>
+    </Form.Field>
+  );
+
   return (
     <Form>
+      {renderBaseElements()}
       {renderFormElements()}
       <Form.Button onClick={add}>追加</Form.Button>
     </Form>

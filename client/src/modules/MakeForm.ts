@@ -8,7 +8,7 @@ export interface MakeFormState {
 
 // state の初期値
 const MakeFormInitialState: MakeFormState = {
-  elements: [],
+  elements: [FormElementInitialState],
 };
 
 // actions と reducers の定義
