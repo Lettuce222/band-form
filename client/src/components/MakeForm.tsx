@@ -223,6 +223,9 @@ const MakeForm: FC = props => {
 
   return (
     <Form>
+      <Form.Field left>
+        <Button primary>作成</Button>
+      </Form.Field>
       {renderBaseElements()}
       {renderFormElements()}
       <Form.Button onClick={add}>追加</Form.Button>
