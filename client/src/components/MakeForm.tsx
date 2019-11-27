@@ -5,15 +5,21 @@ import MakeFormModule from '../modules/MakeForm';
 import { FormElementState } from '../modules/FormElement';
 import { RootState } from '../store';
 
-const MakeForm: FC = () => {
+const MakeForm: FC = props => {
   const dispatch = useDispatch();
   const elems = useSelector(
-    (state: RootState): FormElementState[] => state.MakeForm.list,
+    (state: RootState): FormElementState[] => state.MakeForm.elements,
   );
 
   const add = () => dispatch(MakeFormModule.actions.add());
   const remove = (index: number) =>
     dispatch(MakeFormModule.actions.remove(index));
+  const changeAttr = (index: number, attr: string) =>
+    dispatch(MakeFormModule.actions.changeAttr({ index, str: attr }));
+  const changeTitle = (index: number, title: string) =>
+    dispatch(MakeFormModule.actions.changeTitle({ index, str: title }));
+  const changeText = (index: number, text: string) =>
+    dispatch(MakeFormModule.actions.changeText({ index, str: text }));
 
   const options = [
     { key: 0, text: '記述式', value: 'input' },
@@ -23,45 +29,51 @@ const MakeForm: FC = () => {
     { key: 4, text: 'プルダウン', value: 'pulldown' },
   ];
 
-  const renderElement = (elem: FormElementState) => {
+  const renderElement = (elem: FormElementState, index: number) => {
     switch (elem.attr) {
       case 'input':
-        return (
-          <Form.Field>
-            <input defaultValue="無題の質問" value={elem.title} />
-            <input value="記述式テキスト（短文回答）" disabled />
-          </Form.Field>
-        );
+        return <input value="記述式テキスト（短文回答）" disabled />;
       case 'textarea':
-        return (
-          <Form.Field>
-            <input defaultValue="無題の質問" />
-            <textarea value="記述式テキスト（長文回答）" disabled />
-          </Form.Field>
-        );
+        return <textarea value="記述式テキスト（長文回答）" disabled />;
+      case 'radiobutton':
+        return <textarea value="記述式テキスト（長文回答）" disabled />;
+      case 'checkbox':
+        return <textarea value="記述式テキスト（長文回答）" disabled />;
+      case 'pulldown':
+        return <textarea value="記述式テキスト（長文回答）" disabled />;
       default:
         return <div />;
     }
   };
 
-  const formElements = () => {
-    const result = [];
-    elems.forEach((elem, index) => {
-      result.push(
-        <Form.Field>
-          <Form.Select options={options} placeholder="記述式" />
-          {renderElement(elem)}
-          <Form.Button color="red" onClick={() => remove(index)}>
-            削除
-          </Form.Button>
-        </Form.Field>,
-      );
-    });
-  };
+  const renderFormElements = () =>
+    elems.map((elem, index) => (
+      <Form.Field>
+        <Form.Select
+          options={options}
+          value={elem.attr}
+          onChange={(e, data) =>
+            changeAttr(
+              index,
+              typeof data.value === 'string' ? data.value : 'input',
+            )
+          }
+        />
+        <input
+          placeholder="タイトル"
+          value={elem.title}
+          onChange={e => changeTitle(index, e.target.value)}
+        />
+        {renderElement(elem, index)}
+        <Form.Button color="red" onClick={() => remove(index)}>
+          削除
+        </Form.Button>
+      </Form.Field>
+    ));
 
   return (
     <Form>
-      {formElements()}
+      {renderFormElements()}
       <Form.Button onClick={add}>追加</Form.Button>
     </Form>
   );

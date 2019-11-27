@@ -3,14 +3,12 @@ import { FormElementState, FormElementInitialState } from './FormElement';
 
 // state
 export interface MakeFormState {
-  nextElemId: number;
-  list: FormElementState[];
+  elements: FormElementState[];
 }
 
 // state の初期値
 const MakeFormInitialState: MakeFormState = {
-  nextElemId: 0,
-  list: [],
+  elements: [],
 };
 
 // actions と reducers の定義
@@ -21,16 +19,14 @@ const MakeFormModule = createSlice({
     // todo を追加
     add: state => {
       const elem: FormElementState = FormElementInitialState;
-
-      return {
-        nextElemId: state.nextElemId + 1,
-        list: state.list.concat(elem),
-      };
+      state.elements.push(elem);
     },
 
     remove: (state, action: PayloadAction<number>) => ({
       ...state,
-      list: state.list.filter((elem, index) => index !== action.payload),
+      elements: state.elements.filter(
+        (elem, index) => index !== action.payload,
+      ),
     }),
 
     // FormElementの変更
@@ -39,19 +35,33 @@ const MakeFormModule = createSlice({
       action: PayloadAction<{ index: number; str: string }>,
     ) => ({
       ...state,
-      list: state.list.map((elem, index) => {
-        if (index === action.payload.index) return elem;
+      elements: state.elements.map((elem, index) => {
+        if (index !== action.payload.index) return elem;
 
         return { ...elem, attr: action.payload.str };
       }),
     }),
-    changeTitle: (state, action: PayloadAction<string>) => ({
+    changeTitle: (
+      state,
+      action: PayloadAction<{ index: number; str: string }>,
+    ) => ({
       ...state,
-      title: action.payload,
+      elements: state.elements.map((elem, index) => {
+        if (index !== action.payload.index) return elem;
+
+        return { ...elem, title: action.payload.str };
+      }),
     }),
-    changeText: (state, action: PayloadAction<string>) => ({
+    changeText: (
+      state,
+      action: PayloadAction<{ index: number; str: string }>,
+    ) => ({
       ...state,
-      text: action.payload,
+      elements: state.elements.map((elem, index) => {
+        if (index !== action.payload.index) return elem;
+
+        return { ...elem, text: action.payload.str };
+      }),
     }),
   },
 });
