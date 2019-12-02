@@ -41,6 +41,7 @@ const MakeFormModule = createSlice({
         return { ...elem, attr: action.payload.str, text: '' };
       }),
     }),
+
     changeTitle: (
       state,
       action: PayloadAction<{ index: number; str: string }>,
@@ -52,7 +53,8 @@ const MakeFormModule = createSlice({
         return { ...elem, title: action.payload.str };
       }),
     }),
-    changeText: (
+
+    addOptions: (
       state,
       action: PayloadAction<{ index: number; str: string }>,
     ) => ({
@@ -60,7 +62,48 @@ const MakeFormModule = createSlice({
       elements: state.elements.map((elem, index) => {
         if (index !== action.payload.index) return elem;
 
-        return { ...elem, text: action.payload.str };
+        return { ...elem, options: [...elem.options, action.payload.str] };
+      }),
+    }),
+
+    deleteOptions: (
+      state,
+      action: PayloadAction<{ index: number; optionIndex: number }>,
+    ) => ({
+      ...state,
+      elements: state.elements.map((elem, index) => {
+        if (index !== action.payload.index) return elem;
+
+        return {
+          ...elem,
+          options: elem.options.filter(
+            (option: string, optionIndex: number) =>
+              optionIndex !== action.payload.optionIndex,
+          ),
+        };
+      }),
+    }),
+
+    changeOptions: (
+      state,
+      action: PayloadAction<{
+        index: number;
+        optionIndex: number;
+        str: string;
+      }>,
+    ) => ({
+      ...state,
+      elements: state.elements.map((elem, index) => {
+        if (index !== action.payload.index) return elem;
+
+        return {
+          ...elem,
+          options: elem.options.map((option: string, optionIndex: number) =>
+            optionIndex !== action.payload.optionIndex
+              ? option
+              : action.payload.str,
+          ),
+        };
       }),
     }),
   },

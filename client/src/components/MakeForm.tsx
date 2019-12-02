@@ -12,14 +12,26 @@ const MakeForm: FC = props => {
   );
 
   const add = () => dispatch(MakeFormModule.actions.add());
+
   const remove = (index: number) =>
     dispatch(MakeFormModule.actions.remove(index));
+
   const changeAttr = (index: number, attr: string) =>
     dispatch(MakeFormModule.actions.changeAttr({ index, str: attr }));
+
   const changeTitle = (index: number, title: string) =>
     dispatch(MakeFormModule.actions.changeTitle({ index, str: title }));
-  const changeText = (index: number, text: string) =>
-    dispatch(MakeFormModule.actions.changeText({ index, str: text }));
+
+  const addOptions = (index: number, text: string) =>
+    dispatch(MakeFormModule.actions.addOptions({ index, str: text }));
+
+  const deleteOptions = (index: number, optionIndex: number) =>
+    dispatch(MakeFormModule.actions.deleteOptions({ index, optionIndex }));
+
+  const changeOptions = (index: number, optionIndex: number, text: string) =>
+    dispatch(
+      MakeFormModule.actions.changeOptions({ index, optionIndex, str: text }),
+    );
 
   const options = [
     { key: 0, text: '記述式', value: 'input' },
@@ -30,23 +42,20 @@ const MakeForm: FC = props => {
   ];
 
   const renderElement = (elem: FormElementState, index: number) => {
-    const labels = elem.text.split(',');
-
-    const handleChange = (labelIndex: number, label: string) => {
-      labels[labelIndex] = label;
-      changeText(index, labels.join(','));
-    };
-
     const addButton = () => {
-      changeText(index, `${elem.text},無題のボタン`);
-    };
-    const addPulldown = () => {
-      changeText(index, `${elem.text},無題の選択肢`);
+      addOptions(index, `無題のボタン`);
     };
 
-    const deleteButton = (labelIndex: number) => {
-      labels.splice(labelIndex, 1);
-      changeText(index, labels.join(','));
+    const addPulldown = () => {
+      addOptions(index, `無題の選択肢`);
+    };
+
+    const deleteButton = (optionIndex: number) => {
+      deleteOptions(index, optionIndex);
+    };
+
+    const handleChange = (optionIndex: number, text: string) => {
+      changeOptions(index, optionIndex, text);
     };
 
     switch (elem.attr) {
@@ -63,11 +72,11 @@ const MakeForm: FC = props => {
           </Form.Field>
         );
       case 'radiobutton':
-        if (elem.text === '') changeText(index, '無題のボタン');
+        if (elem.options.length === 0) addButton();
 
         return (
           <Form.Field>
-            {labels.map((label, labelIndex) => (
+            {elem.options.map((option, optionIndex) => (
               <Form.Group>
                 <Form.Field
                   control={Form.Radio}
@@ -76,14 +85,14 @@ const MakeForm: FC = props => {
                   checked={false}
                 />
                 <input
-                  value={label}
-                  onChange={e => handleChange(labelIndex, e.target.value)}
+                  value={option}
+                  onChange={e => handleChange(optionIndex, e.target.value)}
                 />
                 <Button
                   icon
                   color="red"
-                  onClick={() => deleteButton(labelIndex)}
-                  disabled={labels.length === 1}
+                  onClick={() => deleteButton(optionIndex)}
+                  disabled={elem.options.length === 1}
                 >
                   <Icon name="trash" />
                 </Button>
@@ -95,11 +104,11 @@ const MakeForm: FC = props => {
           </Form.Field>
         );
       case 'checkbox':
-        if (elem.text === '') changeText(index, '無題のボタン');
+        if (elem.options.length === 0) addButton();
 
         return (
           <Form.Field>
-            {labels.map((label, labelIndex) => (
+            {elem.options.map((option, optionIndex) => (
               <Form.Group>
                 <Form.Field
                   control={Form.Checkbox}
@@ -108,14 +117,14 @@ const MakeForm: FC = props => {
                   checked={false}
                 />
                 <input
-                  value={label}
-                  onChange={e => handleChange(labelIndex, e.target.value)}
+                  value={option}
+                  onChange={e => handleChange(optionIndex, e.target.value)}
                 />
                 <Button
                   icon
                   color="red"
-                  onClick={() => deleteButton(labelIndex)}
-                  disabled={labels.length === 1}
+                  onClick={() => deleteButton(optionIndex)}
+                  disabled={elem.options.length === 1}
                 >
                   <Icon name="trash" />
                 </Button>
@@ -127,22 +136,22 @@ const MakeForm: FC = props => {
           </Form.Field>
         );
       case 'pulldown':
-        if (elem.text === '') changeText(index, '無題の選択肢');
+        if (elem.options.length === 0) addPulldown();
 
         return (
           <Form.Field>
-            {labels.map((label, labelIndex) => (
+            {elem.options.map((option, optionIndex) => (
               <Form.Group>
-                {labelIndex}.
+                {optionIndex}.
                 <input
-                  value={label}
-                  onChange={e => handleChange(labelIndex, e.target.value)}
+                  value={option}
+                  onChange={e => handleChange(optionIndex, e.target.value)}
                 />
                 <Button
                   icon
                   color="red"
-                  onClick={() => deleteButton(labelIndex)}
-                  disabled={labels.length === 1}
+                  onClick={() => deleteButton(optionIndex)}
+                  disabled={options.length === 1}
                 >
                   <Icon name="trash" />
                 </Button>
@@ -202,14 +211,6 @@ const MakeForm: FC = props => {
       </Form.Field>
       <Form.Field>
         <Label>メンバー</Label>
-        <Form.Group>
-          <input defaultValue="姓" disabled />
-          <input defaultValue="名" disabled />
-        </Form.Group>
-        <Form.Group>
-          <input defaultValue="姓" disabled />
-          <input defaultValue="名" disabled />
-        </Form.Group>
         <Form.Group>
           <input defaultValue="姓" disabled />
           <input defaultValue="名" disabled />
