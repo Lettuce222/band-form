@@ -38,7 +38,7 @@ const MakeFormModule = createSlice({
       elements: state.elements.map((elem, index) => {
         if (index !== action.payload.index) return elem;
 
-        return { ...elem, attr: action.payload.str, text: '' };
+        return { ...elem, attr: action.payload.str, options: [] };
       }),
     }),
 
